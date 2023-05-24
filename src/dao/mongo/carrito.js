@@ -15,20 +15,13 @@ class CarritoDao {
     }
     async getCart(email) {
         try {
-            const cart = await cartModel.findOne({ email });
+            const cart = await cartModel.findOne({usuario: email})
             return cart
         } catch (error) {
             logger.warn(`error en getCart: ${error}`)
             return false
         }
     }
-    // async deleteById(id) {
-    //     try {
-    //         const cart = await cartModel.findById({ _id: id })
-    //     } catch (error) {
-    //         logger.warn(`error en deleteById: ${error}`)
-    //     }
-    // }
     async saveProduct(idCart, idProduct) {
         try {
             const cart = await cartModel.findById({ _id: idCart });
@@ -40,6 +33,10 @@ class CarritoDao {
         } catch (error) {
             logger.warn(`error en saveProduct: ${error}`)
         }
+    }
+    async updateCart(id, data) {
+        const cart = await cartModel.findByIdAndUpdate({_id: id}, {productos: data})
+        return cart
     }
     async delProdById(idCart, idProduct) {
         try {

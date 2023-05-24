@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     avatar: String,
-    policies: String
+    role: String
 })
 const userModel = mongoose.model('Usuarios', userSchema);
 export default userModel;

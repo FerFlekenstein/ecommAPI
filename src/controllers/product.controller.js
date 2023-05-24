@@ -34,7 +34,8 @@ const putProd = async (req, res) => {
     res.send(`El producto ${id} fue actualizado`);
 }
 const admin = async(req, res) => {
-    res.send(getAll())
+    const totalProductos = await productos.getAll()
+    res.send(totalProductos)
 }
 const deleteProd = async (req, res, next) => {
     const { id } = req.params;

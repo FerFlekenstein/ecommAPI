@@ -5,7 +5,7 @@ export default class UserDto {
             id: user._id,
             email: user.email,
             nombre: user.nombre,
-            avatar: user.avatar
+            role: user.role
         }
     }
 }

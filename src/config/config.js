@@ -15,6 +15,7 @@ export default {
         GMAIL_PW: process.env.GMAIL_PW,
         GMAIL_ADMIN: process.env.GMAIL_ADMIN,
         ADMIN_USER: process.env.ADMIN_USER,
-        ADMIN_PWD: process.env.ADMIN_PWD
+        ADMIN_PWD: process.env.ADMIN_PWD,
+        URL_FRONT: process.env.URL_FRONT
     }
 }

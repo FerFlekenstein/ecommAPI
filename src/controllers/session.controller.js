@@ -2,10 +2,11 @@ import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 import UserDto from "../dao/DTO/userDTO.js";
 import userService from "../dao/mongo/user.js";
-import { transporter } from "../mods/mailing.js";
+import CarritoDao from "../dao/mongo/carrito.js";
 import { createHash } from "../services/auth.js";
 import { logger } from "../middlewares/logger.js";
 const userDTO = new UserDto();
+const cartDao = new CarritoDao()
 const registro = async (req, res) => {
     const file = req.file;
     if (!file) return res.status(500).send({ status: "error", error: "Error al guardar el archivo" })
@@ -20,30 +21,34 @@ const registro = async (req, res) => {
         email: email,
         password: hashedPassword,
         avatar: `${req.protocol}://${req.hostname}:${process.env.PORT}/img/${file.filename}`,
-        policies: "PUBLIC"
+        role: "PUBLIC"
     }
+    await cartDao.createCart(email)
     await userService.save(user)
-    const result = await transporter.sendMail({
-        from:`Entrega Final 3 - Fer <${config.app.GMAIL_USER}>`,
-        to: config.app.GMAIL_ADMIN,
-        subject:`Nuevo usuario`,
-        html: `Se registró un nuevo usuario, aqui tienes algunos de sus datos (no lo doxees). Su nombre es: ${nombre} ${apellido}, y su email: ${email}`
-    })
     res.send({ status: "success", message: "Registro hecho exitosamente."})
 }
 const createToken = async (req, res) => {
     try {
-        console.log(req.user);
-        const userToken = userDTO.getUserToken(req.user)
-        const token = jwt.sign(userToken, config.jwt.token, { expiresIn: "1d" })
-        res.cookie(config.jwt.cookie, token, {maxAge: 86400000}).send({status:"success", message:"LOGGEADOOOO"})
+        const tokenReq = req.cookies[config.jwt.cookie]
+        if (tokenReq) {
+            jwt.verify(tokenReq, config.jwt.token);
+        }else{
+            const userToken = userDTO.getUserToken(req.user)
+            const token = jwt.sign(userToken, config.jwt.token, {expiresIn:"1d"})
+            res.cookie(config.jwt.cookie, token)
+        }
+        res.send({status:"success", message:"Ingreso extoso"})
     } catch (error) {
         res.status(500).send({ status: "error", message: "Error del server" })
     }
 }
 const fail = (req, res) => {
-    // res.clearCookie(config.jwt.cookie)
-    res.send({message: "Ocurrió un error al ingresar los datos, vuelve a intentarlo"})
+    try {
+        res.clearCookie(config.jwt.cookie)
+        res.status(401).send({ status: 'error', message: "Ocurrió un error al ingresar los datos, por favor revise de estar ingresando bien su email y contraseña" });
+    } catch (error) {
+        res.send(error)
+    }
 }
 const clearAndRedirect = (req, res) => {
     try {
@@ -53,9 +58,19 @@ const clearAndRedirect = (req, res) => {
         logger.warn(`error en ${req.url} info del error: ${error}`)
     }
 }
+const isLogin = async (req, res) => {
+    const tokenReq = req.cookies[config.jwt.cookie]
+    if(tokenReq){
+        const info = jwt.verify(tokenReq, config.jwt.token);
+        res.send({status: "success", message: {email: info.email}})
+    } else{
+        res.send({status: "ok", message:"no hay cookie"})
+    }
+}
 export default {
     registro,
     createToken,
     fail,
     clearAndRedirect,
+    isLogin
 }
