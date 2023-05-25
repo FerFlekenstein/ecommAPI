@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 app.use(cookieParser());
 app.use(cors({
-    origin: config.app.URL_FRONT,
+    origin: "*",
     credentials: true 
 }));
 initializeStrategy();
