@@ -37,7 +37,7 @@ const createToken = async (req, res) => {
             const token = jwt.sign(userToken, config.jwt.token, {expiresIn:"1d"})
             res.cookie(config.jwt.cookie, token)
         }
-        res.send({status:"success", message:"Ingreso extoso"})
+        res.send({status:"success", message: req.user})
     } catch (error) {
         res.status(500).send({ status: "error", message: "Error del server" })
     }
@@ -62,7 +62,7 @@ const isLogin = async (req, res) => {
     const tokenReq = req.cookies[config.jwt.cookie]
     if(tokenReq){
         const info = jwt.verify(tokenReq, config.jwt.token);
-        res.send({status: "success", message: {email: info.email}})
+        res.send({status: "success", message: {role: info.role}})
     } else{
         res.send({status: "ok", message:"no hay cookie"})
     }

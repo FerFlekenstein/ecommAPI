@@ -11,7 +11,8 @@ const getId = async (req, res, next) => {
 }
 const getByCategory = async (req, res) => {
     const {categoryId} = req.params;
-    const resultado = await productos.getByCategory(categoryId)
+    const category = categoryId.toLowerCase()
+    const resultado = await productos.getByCategory(category)
     res.send(JSON.stringify(resultado));
 }
 const postProd = async (req, res, next) => {
