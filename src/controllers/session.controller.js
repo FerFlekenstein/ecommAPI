@@ -35,7 +35,7 @@ const createToken = async (req, res) => {
         }else{
             const userToken = userDTO.getUserToken(req.user)
             const token = jwt.sign(userToken, config.jwt.token, {expiresIn:"1d"})
-            res.cookie(config.jwt.cookie, token)
+            res.cookie(config.jwt.cookie, token, {sameSite: "none", secure: true})
         }
         res.send({status:"success", message: req.user})
     } catch (error) {
