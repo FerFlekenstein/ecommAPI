@@ -22,7 +22,9 @@ app.use(express.static(`${__dirname}/public`));
 app.use(cookieParser());
 app.use(cors({
     origin: config.app.URL_FRONT,
-    credentials: true 
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Type', 'Authorization'],
 }));
 initializeStrategy();
 //Routes
