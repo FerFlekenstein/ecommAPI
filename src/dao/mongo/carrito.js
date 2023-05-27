@@ -5,7 +5,7 @@ class CarritoDao {
 
     async createCart(email) {
         try {
-            const cart = { email: email, productos: [] }
+            const cart = { usuario: email, productos: [] }
             await cartModel.create(cart);
             return await cartModel.find(cart)._id
         } catch (error) {
