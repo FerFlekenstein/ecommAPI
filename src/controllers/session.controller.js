@@ -53,7 +53,7 @@ const fail = (req, res) => {
 const clearAndRedirect = (req, res) => {
     try {
         res.clearCookie(config.jwt.cookie)
-        res.redirect('/')
+        res.send({status: "success", message: "Vuelva prontos"})
     } catch (error) {
         logger.warn(`error en ${req.url} info del error: ${error}`)
     }
