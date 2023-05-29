@@ -22,7 +22,7 @@ const postProd = async (req, res, next) => {
         category: req.body.category,
         stock: req.body.stock,
         price: req.body.price,
-        thumbnail : `${req.protocol}://${req.hostname}:${process.env.PORT}/img/${file.filename}`
+        thumbnail : `https://${req.hostname}/img/${file.filename}`
     }
     const prodBD = await productos.save(nuevoProd);
     res.send(JSON.stringify(prodBD._id));
