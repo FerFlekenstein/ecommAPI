@@ -35,7 +35,7 @@ const createToken = async (req, res) => {
         }else{
             const userToken = userDTO.getUserToken(req.user)
             const token = jwt.sign(userToken, config.jwt.token, {expiresIn:"1d"})
-            res.cookie(config.jwt.cookie, token, {sameSite: "none", secure: true, domain: "https://proyecto-react-one.vercel.app", path: "/"})
+            res.cookie(config.jwt.cookie, token, {sameSite: "none", secure: true, path: "/"})
         }
         res.send({status:"success", message: req.user})
     } catch (error) {
