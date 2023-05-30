@@ -17,9 +17,10 @@ const getByCategory = async (req, res) => {
 }
 const postProd = async (req, res, next) => {
     const file = req.file
+    const category = req.body.category.toLowerCase()
     const nuevoProd = {
         title: req.body.title,
-        category: req.body.category,
+        category: category,
         stock: req.body.stock,
         price: req.body.price,
         thumbnail : `https://${req.hostname}/img/${file.filename}`

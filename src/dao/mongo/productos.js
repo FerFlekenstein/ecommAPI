@@ -18,9 +18,9 @@ class ProductosDao {
             logger.error(`error en getById: ${error}`)
         }
     }
-    async getByCategory(category) {
+    async getByCategory(data) {
         try {
-            return await prodModel.find({category: category})
+            return await prodModel.find({category: data})
         } catch (error) {
             logger.error(`error en getByCategory: ${error}`)
         }
